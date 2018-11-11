@@ -1,0 +1,28 @@
+{
+  "name": "ajax-blog-frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "browserify main.js -o bundle.js",
+    "watch": "watchify main.js -o bundle.js",
+    "dev-server": "live-server .",
+    "dev": "run-all \"npm run watch\" \"npm run dev-server\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jkisk/ajax-blog-frontend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jkisk/ajax-blog-frontend/issues"
+  },
+  "homepage": "https://github.com/jkisk/ajax-blog-frontend#readme",
+  "dependencies": {
+    "browserify": "^16.2.3",
+    "live-server": "^1.2.0",
+    "run-all": "^1.0.1",
+    "watchify": "^3.11.0"
+  }
+}
