@@ -28,7 +28,7 @@ form.addEventListener('submit', (e) => {
         let result = data.data.result
         console.log(data)
         blogArea.innerHTML = render.display(result)
-        
+      
     })
         
 })
