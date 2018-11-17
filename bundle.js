@@ -10,12 +10,9 @@ const render = require('./render.js')
 axios.get('https://powerful-castle-44228.herokuapp.com/blogs')
     .then(function (data) {
         let result = data.data.result
-
         blogArea.innerHTML = render.display(result)
 
     })
-
-
 
 
 form.addEventListener('submit', (e) => {
@@ -24,13 +21,12 @@ form.addEventListener('submit', (e) => {
         title: e.target.title.value,
         content: e.target.content.value
     })
-    .then(function (data) {
-        let result = data.data.result
-        console.log(data)
-        blogArea.innerHTML = render.display(result)
-      
-    })
-        
+        .then(function (data) {
+            let result = data.data.result
+            blogArea.innerHTML = render.display(result)
+
+        })
+
 })
 },{"./render.js":29,"axios":2}],2:[function(require,module,exports){
 module.exports = require('./lib/axios');
