@@ -15,7 +15,7 @@ const addEventListeners = () => {
 
             console.log("delete event listener triggered")
 
-            axios.delete(`http://localhost:3000/blogs/${e.target.getAttribute("data-id")}`)
+            axios.delete(`https://powerful-castle-44228.herokuapp.com/blogs/${e.target.getAttribute("data-id")}`)
                 .then(function (data) {
                     let result = data.data.result
                     blogArea.innerHTML = render.display(result)
@@ -49,7 +49,7 @@ const addEventListeners = () => {
 
 
 const renderBlogs = () => {
-    axios.get('http://localhost:3000/blogs')
+    axios.get('https://powerful-castle-44228.herokuapp.com/blogs')
         .then(function (data) {
             let result = data.data.result
             blogArea.innerHTML = render.display(result)
@@ -63,7 +63,7 @@ renderBlogs()
 
 const postBlog = (e) => {
     e.preventDefault()
-    axios.post('http://localhost:3000/blogs', {
+    axios.post('https://powerful-castle-44228.herokuapp.com/blogs', {
         title: e.target.title.value,
         content: e.target.content.value
     })
@@ -77,7 +77,7 @@ const postBlog = (e) => {
 
 const editBlog = (e) => {
     e.preventDefault()
-    axios.put(`http://localhost:3000/blogs/${currentId}`, {
+    axios.put(`https://powerful-castle-44228.herokuapp.com/blogs/${currentId}`, {
         title: e.target.title.value,
         content: e.target.content.value
     })
