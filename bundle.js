@@ -1,33 +1,104 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 
-const form = document.getElementById('form')
+
 const axios = require('axios')
 const blogArea = document.querySelector('#blog-area')
 const render = require('./render.js')
+const form = document.getElementById('form')
+let currentId
+
+const addEventListeners = () => {
+    const removeArray = document.querySelectorAll('.remove')
+    const editArray = document.querySelectorAll('.update')
+
+    for (ele of removeArray) {
+        ele.addEventListener('click', (e) => {
+
+            console.log("delete event listener triggered")
+
+            axios.delete(`http://localhost:3000/blogs/${e.target.getAttribute("data-id")}`)
+                .then(function (data) {
+                    let result = data.data.result
+                    blogArea.innerHTML = render.display(result)
+
+                    addEventListeners()
 
 
 
-axios.get('https://powerful-castle-44228.herokuapp.com/blogs')
-    .then(function (data) {
-        let result = data.data.result
-        blogArea.innerHTML = render.display(result)
+                })
+        })
+    }
 
-    })
+    for (ele of editArray) {
+        ele.addEventListener('click', (e) => {
+            currentId = e.target.getAttribute('data-id')
+
+            const title = document.querySelector(`strong[data-id="${e.target.getAttribute('data-id')}"]`)
+            const titleArea = document.querySelector('input.title')
+            titleArea.value = title.textContent
+
+            const content = document.querySelector(`p[data-id="${e.target.getAttribute('data-id')}"]`)
+            const contentArea = document.querySelector('.content')
+            contentArea.value = content.textContent
+
+            form.removeEventListener('submit', postBlog)
+            form.addEventListener('submit', editBlog)
+
+        })
+    }
+}
 
 
-form.addEventListener('submit', (e) => {
+const renderBlogs = () => {
+    axios.get('http://localhost:3000/blogs')
+        .then(function (data) {
+            let result = data.data.result
+            blogArea.innerHTML = render.display(result)
+
+            addEventListeners()
+
+        })
+}
+
+renderBlogs()
+
+const postBlog = (e) => {
     e.preventDefault()
-    axios.post('https://powerful-castle-44228.herokuapp.com/blogs', {
+    axios.post('http://localhost:3000/blogs', {
         title: e.target.title.value,
         content: e.target.content.value
     })
         .then(function (data) {
             let result = data.data.result
             blogArea.innerHTML = render.display(result)
+            addEventListeners()
+        })
+
+}
+
+const editBlog = (e) => {
+    e.preventDefault()
+    axios.put(`http://localhost:3000/blogs/${currentId}`, {
+        title: e.target.title.value,
+        content: e.target.content.value
+    })
+        .then(function (data) {
+            renderBlogs()
+            addEventListeners()
+            form.removeEventListener('submit', editBlog)
+            form.addEventListener('submit', postBlog)
 
         })
 
-})
+}
+
+form.addEventListener('submit', postBlog)
+
+
+
+
+
+
 },{"./render.js":29,"axios":2}],2:[function(require,module,exports){
 module.exports = require('./lib/axios');
 },{"./lib/axios":4}],3:[function(require,module,exports){
@@ -1660,10 +1731,17 @@ process.chdir = function (dir) {
 process.umask = function() { return 0; };
 
 },{}],29:[function(require,module,exports){
+const edit = document.getElementById('edit')
+const remove = document.getElementById('remove')
+
+
 const display = (array)=> {
     let result = ``
     for (let ele of array) {
-        result += `<strong>${ele.title}</strong><br>${ele.content}<br>` 
+        
+        result += `<div><strong data-id="${ele.id}">${ele.title}</strong><br><p data-id=${ele.id}>${ele.content}</p><br> 
+        <input class="button-is-small update"  type="submit" value="edit" data-id="${ele.id}">
+        <input class="button-is-smal remove"  type="submit" value="delete" data-id="${ele.id}"><br></div>`
     }
     return result
 }

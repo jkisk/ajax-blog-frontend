@@ -2,7 +2,7 @@
   "name": "ajax-blog-frontend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "bundle.js",
   "scripts": {
     "build": "browserify main.js -o bundle.js",
     "watch": "watchify main.js -o bundle.js",
